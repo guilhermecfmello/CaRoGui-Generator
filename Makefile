@@ -16,9 +16,9 @@ sintatico.tab.h sintatico.tab.c: sintatico.y
 
 clean:
 	rm -f *.yy.c
+	rm -f *.yy.h
 	rm -f *.tab.c
 	rm -f *.tab.h
 	rm -f *.o
 	rm -f regalloc
-	rm -f *.tab.h
 	rm -f *.tab.o
