@@ -3,6 +3,7 @@
 
 # Flex and bison ignore files
 *.yy.c
+*.yy.h
 *.tab.c
 *.tab.h
 
