@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 
+gerador
+
 # Flex and bison ignore files
 *.yy.c
 *.yy.h
