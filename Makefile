@@ -25,5 +25,5 @@ clean:
 	rm -f *.tab.c
 	rm -f *.tab.h
 	rm -f *.o
-	rm -f regalloc
+	rm -f gerador
 	rm -f *.tab.o
