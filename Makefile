@@ -4,9 +4,14 @@ CC=gcc
 PROGRAMA = regalloc
 LEXICO = lexico.l
 SINTATICO = sintatico.y
-OBJETOS = 
+OBJETOS = first.o
+FLAGS = -std=c99
 
+gerador: $(OBJETOS)
+	$(CC) -g $(OBJETOS) -o gerador $(FLAGS)
 
+first.o: first.c
+	$(CC) -o first.o -c first.c -g $(FLAGS)
 
 lexico.yy.h lexico.yy.c: lexico.l
 	flex lexico.l
