@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+# Flex and bison ignore files
+*.yy.c
+*.tab.c
+*.tab.h
+
 # Object files
 *.o
 *.ko
