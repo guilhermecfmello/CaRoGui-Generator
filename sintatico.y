@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lexico.yy.h"
-
+#include "Lista.h"
+#include "Ast.h"
 
 extern char* yytext;
 int yyerror(char *s);

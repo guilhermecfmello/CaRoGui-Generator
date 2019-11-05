@@ -4,7 +4,7 @@ CC=gcc
 PROGRAMA = regalloc
 LEXICO = lexico.l
 SINTATICO = sintatico.y
-OBJETOS = first.o
+OBJETOS = first.o Ast.o Lista.o lexico.yy.o	sintatico.tab.o
 FLAGS = -std=c99
 
 gerador: $(OBJETOS)
@@ -13,10 +13,16 @@ gerador: $(OBJETOS)
 first.o: first.c
 	$(CC) -o first.o -c first.c -g $(FLAGS)
 
-lexico.yy.h lexico.yy.c: lexico.l
-	flex lexico.l
+Ast.o: Ast.c Ast.h
+	$(CC) -o Ast.o -c Ast.c -g $(FLAGS)
 
-sintatico.tab.h sintatico.tab.c: sintatico.y
+Lista.o: Lista.c Lista.h
+	$(CC) -o Lista.o -c Lista.c -g $(FLAGS)
+
+lexico.yy.h lexico.yy.c: $(LEXICO)
+	$(FLEX) $(LEXICO)
+
+sintatico.tab.h sintatico.tab.c: $(SINTATICO)
 	$(BISON) -d -o sintatico.tab.c $(SINTATICO)
 
 clean:
