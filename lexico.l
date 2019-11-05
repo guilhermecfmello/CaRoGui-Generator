@@ -11,12 +11,13 @@
 %}
 
 %%
-AST {return ARROW_TOKEN; }
---> {return ARROW_TOKEN; }
-:         {return COLON;  }
+AST {return AST; }
+--> {return ARROW; }
+:   {return COLON;  }
 
 [\t\n]     ;
 [0-9]+  {yylval.int_t = strtod(yytext, NULL); return(NUM);}
+^[a-zA-Z_]+ {return ID}
 "CONSTANT" {return CONSTANT; }
 "VALUE" {return VALUE;}
 "GLOBAL" {return GLOBAL; }
@@ -36,13 +37,37 @@ AST {return ARROW_TOKEN; }
 "SCANF" {return SCANF; }
 "EXIT" {return EXIT;}
 "RETURN" {return RETURN;}
-"BOP" {return BOP;}
-"UOP" {return UOP;}
-"RETURN" {return RETURN; }
 "(" {return LPAR;}
 ")" {return RPAR;}
 "," {return COMMA;}
-=         {return ASSIGN;  }
+"="         {return ASSIGN;  }
+"[" {return LBRACKET;}
+"]" {return RBRACKET;}
+"+" {return PLUS;}
+"-" {return MINUS;}
+"*" {return MULTIPLY;}
+"/" {return DIV;}
+"%" {return REMAINDER;}
+"&" {return BITWISE_AND;}
+"|" {return BITWISE_OR;}
+"^" {return BITWISE_XOR;}
+"&&" {return LOGICAL_AND;}
+"||" {return LOGICAL_OR;}
+"==" {return EQUAL;}
+"!=" {return NOT_EQUAL;}
+"<" {return LESS_THAN;}
+">" {return GREATER_THAN;}
+"<=" {return LESS_EQUAL;}
+">=" {return GREATER_EQUAL;}
+">>" {return R_SHIFT;}
+"<<" {return L_SHIFT;}
+"+=" {return ADD_ASSIGN;}
+"-=" {return MINUS_ASSIGN;}
+"++" {return INC;}
+"--" {return DEC;}
+"~" {return BITWISE_NOT;}
+"!" {return NOT;}
+
 <<EOF>> {return(END_FILE);}
 .       {printf("Erro lexico"); exit(0);}
 %%
