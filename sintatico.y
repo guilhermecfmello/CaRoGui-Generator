@@ -45,7 +45,7 @@ extern int yylex();
 %token ASSIGN
 %token PLUS
 %token MINUS
-%token MULTIPLY
+// %token MULTIPLY
 %token DIV
 %token REMAINDER
 %token BITWISE_AND
@@ -67,17 +67,34 @@ extern int yylex();
 %token DEC
 %token BITWISE_NOT
 %token NOT
+<<<<<<< HEAD
 %token ID
+=======
+%token ARROW
+%token CHAR
+%token COLON
+%token ESTRELA
+%token ID
+%token INT
+%token NUM
+%token PARAMETER
+%token AST2
+%token VOID
+
+
 
 %token END_FILE
 
 %start inicio
 
-%type <int_t> programa
+// %type <int_t> programa
 
 %%
-    inicio:
-        AST ARROW body
+    inicio: AST2 ARROW body2 { exit(0); }
+    ;
+
+    body2: {}
+    ;
 
     body:
         constant_def body
@@ -98,6 +115,8 @@ extern int yylex();
     local_def:
         VARIABLE COLON ID TYPE COLON tipo
         |
+    ;
+
     tipo:
         INT ponteiro
         | CHAR ponteiro array
@@ -179,12 +198,28 @@ extern int yylex();
 
     plus_exp:
         
+    ;
 
-        
+    comando_assign:
+    ;
+    comando_do_while:
+    ;
+    comando_if:
+    ;
+    comando_while:
+    ;
+    comando_for:
+    ;
+    comando_printa:
+    ;
+    comando_scanf:
+    ;
+    comando_exit:
+    ;
 
-        
-
-        
+    function_return:
+    ;
+   
         
 %%
 
