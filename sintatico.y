@@ -67,6 +67,7 @@ extern int yylex();
 %token DEC
 %token BITWISE_NOT
 %token NOT
+%token ID
 
 %token END_FILE
 
@@ -82,7 +83,6 @@ extern int yylex();
         constant_def body
         | global_def body
         | function_def body
-
     ;
 
     constant_def:
@@ -130,15 +130,59 @@ extern int yylex();
         |
     ;
     commands:
-        comando_assign commands
-        | comando_do_while commands
+         comando_do_while commands
         | comando_if commands
         | comando_while commands
         | comando_for commands
         | comando_printa commands
         | comando_scanf commands
         | comando_exit commands
+        | expressoes commands
+        |
+    ;
+        
+    simbolo_expressao:
+        ASSIGN
+        | PLUS
+        | MINUS
+        | MULTIPLY
+        | DIV
+        | REMAINDER
+        | BITWISE_AND
+        | BITWISE_OR
+        | BITWISE_XOR
+        | LOGICAL_AND
+        | LOGICAL_OR
+        | EQUAL
+        | NOT_EQUAL
+        | LESS_THAN
+        | GREATER_THAN
+        | LESS_EQUAL
+        | GREATER_EQUAL
+        | R_SHIFT
+        | L_SHIFT
+        | ADD_ASSIGN
+        | MINUS_ASSIGN
+        | INC
+        | DEC
+        | NOT
+        ;
+    
+    bin_exp:
+        LPAR simbolo_expressao COMMA simbolo_expressao RPAR
+        | LPAR simbolo_expressao COMMA ID RPAR
+        | LPAR ID COMMA simbolo_expressao RPAR
+        | LPAR ID COMMA ID RPAR
+        
+    assign_exp:
+        EQUAL LPAR ID COMMA
 
+    plus_exp:
+        
+
+        
+
+        
 
         
         
