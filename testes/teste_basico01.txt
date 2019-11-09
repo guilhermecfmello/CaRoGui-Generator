@@ -19,7 +19,7 @@ FUNCTION: g
     PARAMETER: arg_2 TYPE: char
     PARAMETER: arg_3 TYPE: int
     VARIABLE: v TYPE: void *
-    ++(j);
+    (j)++;
     =(c, a);
     RETURN()
     END_FUNCTION

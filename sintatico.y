@@ -195,6 +195,9 @@ extern int yylex();
         PLUS LPAR expressao RPAR {printf("TENTANDo");}
         | MINUS LPAR expressao RPAR {printf("TENTANDo");}
         | INC LPAR expressao RPAR {printf("TENTANDo");}
+        | LPAR expressao RPAR INC {printf("TENTANDo");}
+        | DEC LPAR expressao RPAR {printf("TENTANDo");}
+        | LPAR expressao RPAR DEC {printf("TENTANDo");}
         | BITWISE_NOT LPAR expressao RPAR {printf("TENTANDo");}
         | NOT LPAR expressao RPAR {printf("TENTANDo");}
         | BITWISE_AND LPAR expressao RPAR {printf("TENTANDo");}
@@ -202,6 +205,7 @@ extern int yylex();
     ;
 
     comando_do_while:
+        DO_WHILE LPAR commands COMMA expressao RPAR
     ;
     comando_if:
         IF LPAR 
