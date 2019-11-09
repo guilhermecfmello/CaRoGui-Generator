@@ -201,31 +201,6 @@ extern int yylex();
 
     ;
 
-    simbolos_bin:
-        ASSIGN
-        | PLUS
-        | MINUS
-        | MULTIPLY
-        | DIV
-        | REMAINDER
-        | BITWISE_AND
-        | BITWISE_OR
-        | BITWISE_XOR
-        | LOGICAL_AND
-        | LOGICAL_OR
-        | EQUAL
-        | NOT_EQUAL
-        | LESS_THAN
-        | GREATER_THAN
-        | LESS_EQUAL
-        | GREATER_EQUAL
-        | R_SHIFT
-        | L_SHIFT
-        | ADD_ASSIGN
-        | MINUS_ASSIGN
-        ;
-    
-                
     comando_do_while:
     ;
     comando_if:
