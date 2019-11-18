@@ -45,7 +45,7 @@ extern int yylex();
 %token ASSIGN
 %token PLUS
 %token MINUS
-// %token MULTIPLY
+%token MULTIPLY
 %token DIV
 %token REMAINDER
 %token BITWISE_AND
@@ -67,18 +67,18 @@ extern int yylex();
 %token DEC
 %token BITWISE_NOT
 %token NOT
+%token ID
 %token ARROW
 %token CHAR
 %token COLON
 %token ESTRELA
-%token ID
 %token INT
 %token NUM
 %token PARAMETER
-%token AST2
+%token AST_TOKEN
 %token VOID
-
-
+%token SEMICOLON
+%token QUOTE
 
 %token END_FILE
 
@@ -87,7 +87,7 @@ extern int yylex();
 // %type <int_t> programa
 
 %%
-    inicio: AST2 ARROW body2 { exit(0); }
+    inicio: AST_TOKEN ARROW body { printf("RODOU"); exit(0); }
     ;
 
     body2: {}
@@ -97,15 +97,17 @@ extern int yylex();
         constant_def body
         | global_def body
         | function_def body
+        |
     ;
 
     constant_def:
         CONSTANT COLON ID VALUE COLON NUM
+        | CONSTANT COLON ID VALUE COLON MINUS NUM
         |
     ;
 
     global_def:
-        GLOBAL VARIABLE COLON ID TYPE COLON
+        GLOBAL VARIABLE COLON ID TYPE COLON tipo
         |
     ;
 
@@ -115,7 +117,7 @@ extern int yylex();
     ;
 
     tipo:
-        INT ponteiro
+        INT ponteiro array
         | CHAR ponteiro array
         | VOID ponteiro array
     ;
@@ -131,36 +133,82 @@ extern int yylex();
     ;
 
     function_def:
-        FUNCTION COLON ID function_body function_return END_FUNCTION
+        FUNCTION COLON ID function_body function_return END_FUNCTION{
+
+        }
     ;
 
     function_body:
-        return_type parameters local_def commands
+        return_type parameters local_def commands{
+        }
     ;
     return_type:
         RETURN_TYPE COLON tipo
     ;
 
     parameters:
-        PARAMETER COLON ID TYPE COLON tipo
+        PARAMETER COLON ID TYPE COLON tipo parameters
         |
     ;
     commands:
-        comando_assign commands
-        | comando_do_while commands
+         comando_do_while commands
         | comando_if commands
         | comando_while commands
         | comando_for commands
         | comando_printa commands
         | comando_scanf commands
         | comando_exit commands
+        | expressao SEMICOLON commands
+        |
+    ;
+     
+    expressao:
+        bin_exp
+        | unary_exp
+        | ID
+    ;
+    bin_exp:
+         ASSIGN LPAR expressao COMMA expressao RPAR 
+         | PLUS LPAR expressao COMMA expressao RPAR
+         | MINUS LPAR expressao COMMA expressao RPAR
+         | MULTIPLY LPAR expressao COMMA expressao RPAR
+         | DIV LPAR expressao COMMA expressao RPAR
+         | REMAINDER LPAR expressao COMMA expressao RPAR
+         | BITWISE_AND LPAR expressao COMMA expressao RPAR
+         | BITWISE_OR LPAR expressao COMMA expressao RPAR
+         | BITWISE_XOR LPAR expressao COMMA expressao RPAR
+         | LOGICAL_AND LPAR expressao COMMA expressao RPAR
+         | LOGICAL_OR LPAR expressao COMMA expressao RPAR
+         | EQUAL LPAR expressao COMMA expressao RPAR
+         | NOT_EQUAL LPAR expressao COMMA expressao RPAR
+         | LESS_THAN LPAR expressao COMMA expressao RPAR
+         | GREATER_THAN LPAR expressao COMMA expressao RPAR
+         | LESS_EQUAL LPAR expressao COMMA expressao RPAR
+         | GREATER_EQUAL LPAR expressao COMMA expressao RPAR
+         | R_SHIFT LPAR expressao COMMA expressao RPAR
+         | L_SHIFT LPAR expressao COMMA expressao RPAR
+         | ADD_ASSIGN LPAR expressao COMMA expressao RPAR
+         | MINUS_ASSIGN LPAR expressao COMMA expressao RPAR
+    ;
+        
+    unary_exp:
+        PLUS LPAR expressao RPAR {printf("TENTANDo");}
+        | MINUS LPAR expressao RPAR {printf("TENTANDo");}
+        | INC LPAR expressao RPAR {printf("TENTANDo");}
+        | LPAR expressao RPAR INC {printf("TENTANDo");}
+        | DEC LPAR expressao RPAR {printf("TENTANDo");}
+        | LPAR expressao RPAR DEC {printf("TENTANDo");}
+        | BITWISE_NOT LPAR expressao RPAR {printf("TENTANDo");}
+        | NOT LPAR expressao RPAR {printf("TENTANDo");}
+        | BITWISE_AND LPAR expressao RPAR {printf("TENTANDo");}
+
     ;
 
-    comando_assign:
-    ;
     comando_do_while:
+        DO_WHILE LPAR commands COMMA expressao RPAR
     ;
     comando_if:
+        IF LPAR 
     ;
     comando_while:
     ;
@@ -174,6 +222,10 @@ extern int yylex();
     ;
 
     function_return:
+        RETURN LPAR expressao RPAR
+        | RETURN LPAR RPAR
+
+
     ;
    
         
@@ -189,3 +241,7 @@ int main(int argc, char **argv){
 
   return 0;
 }
+
+
+//TODO lidar com ponteiro 
+

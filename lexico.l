@@ -11,10 +11,10 @@
 %}
 
 %%
-AST                         {return AST2; }
--->                         {return ARROW; }
-:                           {return COLON;  }
-[\t\n]                      { ;}
+"AST"                         {return AST_TOKEN; }
+"-->"                         {return ARROW; }
+":"                           {return COLON;  }
+[\t\n ]                      { ;}
 [0-9]+                      {yylval.int_t = strtod(yytext, NULL); return(NUM);}
 "CONSTANT"                  {return CONSTANT; }
 "VALUE"                     {return VALUE;}
@@ -35,6 +35,7 @@ AST                         {return AST2; }
 "SCANF"                     {return SCANF; }
 "EXIT"                      {return EXIT;}
 "RETURN"                    {return RETURN;}
+"PARAMETER"                 {return PARAMETER;}
 "("                         {return LPAR;}
 ")"                         {return RPAR;}
 ","                         {return COMMA;}
@@ -65,7 +66,9 @@ AST                         {return AST2; }
 "--"                        {return DEC;}
 "~"                         {return BITWISE_NOT;}
 "!"                         {return NOT;}
-[a-zA-Z_][a-zA-Z0-9_]*      {return ID;}
+"\""                        {return QUOTE;}
+";"                         {return SEMICOLON;}
+[a-zA-Z_]+[a-zA-Z0-9_]*      {return ID;}
 
 <<EOF>> {return(END_FILE);}
 .       {printf("Erro lexico"); exit(0);}
