@@ -20,6 +20,7 @@
 
 typedef struct __node {
     char type;
+    
     Lista command_list;
 } node;
 
