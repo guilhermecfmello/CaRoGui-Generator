@@ -124,9 +124,7 @@ extern int yylex();
 
     ponteiro:
         ESTRELA ponteiro
-        |
-    ;
-
+        |NUM
     array:
         LBRACKET NUM RBRACKET
         |
@@ -163,9 +161,9 @@ extern int yylex();
     ;
      
     expressao:
-        bin_exp
-        | unary_exp
-        | ID
+        bin_exp { printf("Expressao Binaria\n"); }
+        | unary_exp { printf("Expressao Unaria\n"); }
+        | ID { printf("Identifier\n"); }
     ;
     bin_exp:
          ASSIGN LPAR expressao COMMA expressao RPAR 
@@ -192,15 +190,15 @@ extern int yylex();
     ;
         
     unary_exp:
-        PLUS LPAR expressao RPAR {printf("TENTANDo");}
-        | MINUS LPAR expressao RPAR {printf("TENTANDo");}
-        | INC LPAR expressao RPAR {printf("TENTANDo");}
-        | LPAR expressao RPAR INC {printf("TENTANDo");}
-        | DEC LPAR expressao RPAR {printf("TENTANDo");}
-        | LPAR expressao RPAR DEC {printf("TENTANDo");}
-        | BITWISE_NOT LPAR expressao RPAR {printf("TENTANDo");}
-        | NOT LPAR expressao RPAR {printf("TENTANDo");}
-        | BITWISE_AND LPAR expressao RPAR {printf("TENTANDo");}
+        PLUS LPAR expressao RPAR {printf("TENTANDO\n");}
+        | MINUS LPAR expressao RPAR {printf("TENTANDO\n");}
+        | INC LPAR expressao RPAR {printf("TENTANDO\n");}
+        | LPAR expressao RPAR INC {printf("TENTANDO\n");}
+        | DEC LPAR expressao RPAR {printf("TENTANDO\n");}
+        | LPAR expressao RPAR DEC {printf("TENTANDO\n");}
+        | BITWISE_NOT LPAR expressao RPAR {printf("TENTANDO\n");}
+        | NOT LPAR expressao RPAR {printf("TENTANDO\n");}
+        | BITWISE_AND LPAR expressao RPAR {printf("TENTANDO\n");}
 
     ;
 
@@ -232,7 +230,7 @@ extern int yylex();
 %%
 
 int yyerror(char *s){
-  printf("Teve algum erro %s",s);
+  printf("Teve algum erro %s\n",s);
 }
 
 int main(int argc, char **argv){
