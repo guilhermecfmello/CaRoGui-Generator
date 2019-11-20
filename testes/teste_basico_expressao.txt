@@ -6,6 +6,8 @@ FUNCTION: g
     PARAMETER: arg_3 TYPE: int
     VARIABLE: v TYPE: void *
     +(+(a,b) , +(c, d));
+
+    +(<<(/(e,f),g), -(h, i));
     RETURN()
     END_FUNCTION
 

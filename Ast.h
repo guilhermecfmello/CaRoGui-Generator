@@ -71,7 +71,7 @@ Exp expSetId(Exp ex, char *identifier);
 
 Exp expInsertLeft(Exp parent, Exp child);
 
-Exp expInsertRigdht(Exp parent, Exp child);
+Exp expInsertRight(Exp parent, Exp child);
 
 char *expGetId(Exp ex);
 

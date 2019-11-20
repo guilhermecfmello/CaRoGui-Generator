@@ -13,7 +13,7 @@
 extern char* yytext;
 extern int yylex();
 int yyerror(char *s);
-Exp exp, expAux;
+Exp expression, expAux;
 
 AST ast;
 // Lista expTest;
@@ -90,8 +90,8 @@ AST ast;
 %start inicio
 
 %type <node> expressao
+%type <node> bin_exp
 %type <id> ID
-
 
 %%
     inicio: AST_TOKEN ARROW body { printf("RODOU\n"); exit(0); }
@@ -171,33 +171,33 @@ AST ast;
     expressao:
         bin_exp {  }
         | unary_exp {  }
-        | ID { char *temp = $1; char *identifier = (char*) malloc(sizeof(char) * strlen(temp)); strcpy(identifier, temp); exp = expCreate(NULL, VAR_EXP); expSetId(exp, identifier); $$ = exp; }
+        | ID { char *temp = $1; char *identifier = (char*) malloc(sizeof(char) * strlen(temp)); strcpy(identifier, temp); expression = expCreate(NULL, VAR_EXP); expSetId(expression, identifier); $$ = expression; }
     ;
 
 
 
     bin_exp:
-         ASSIGN LPAR expressao COMMA expressao RPAR             { exp = expCreate(NULL, ASSIGN_EXP); }
-         | PLUS LPAR expressao COMMA expressao RPAR             { exp = expCreate(NULL, PLUS_EXP); Exp temp1 = $3; Exp temp2 = $5; if(expGetType(temp1) == VAR_EXP) printf("LEFT: %s", expGetId(temp1)); if(expGetType(temp2) == VAR_EXP) printf("==== RIGHT: %s\n", expGetId(temp2)); else printf("\n"); }
-         | MINUS LPAR expressao COMMA expressao RPAR            { exp = expCreate(NULL, MINUS_EXP); }
-         | MULTIPLY LPAR expressao COMMA expressao RPAR         { exp = expCreate(NULL, MULTIPLY_EXP); }
-         | DIV LPAR expressao COMMA expressao RPAR              { exp = expCreate(NULL, DIV_EXP); }
-         | REMAINDER LPAR expressao COMMA expressao RPAR        { exp = expCreate(NULL, REMAINDER_EXP); }
-         | BITWISE_AND LPAR expressao COMMA expressao RPAR      { exp = expCreate(NULL, BITWISE_AND_EXP); }
-         | BITWISE_OR LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, BITWISE_OR_EXP); }
-         | BITWISE_XOR LPAR expressao COMMA expressao RPAR      { exp = expCreate(NULL, BITWISE_XOR_EXP); }
-         | LOGICAL_AND LPAR expressao COMMA expressao RPAR      { exp = expCreate(NULL, LOGICAL_AND_EXP); }
-         | LOGICAL_OR LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, LOGICAL_OR_EXP); }
-         | EQUAL LPAR expressao COMMA expressao RPAR            { exp = expCreate(NULL, EQUAL_EXP); }
-         | NOT_EQUAL LPAR expressao COMMA expressao RPAR        { exp = expCreate(NULL, NOT_EQUAL_EXP); }
-         | LESS_THAN LPAR expressao COMMA expressao RPAR        { exp = expCreate(NULL, LESS_THAN_EXP); }
-         | GREATER_THAN LPAR expressao COMMA expressao RPAR     { exp = expCreate(NULL, GREATER_THAN_EXP); }
-         | LESS_EQUAL LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, LESS_EQUAL_EXP); }
-         | GREATER_EQUAL LPAR expressao COMMA expressao RPAR    { exp = expCreate(NULL, GREATER_EQUAL_EXP); }
-         | R_SHIFT LPAR expressao COMMA expressao RPAR          { exp = expCreate(NULL, R_SHIFT_EXP); }
-         | L_SHIFT LPAR expressao COMMA expressao RPAR          { exp = expCreate(NULL, L_SHIFT_EXP); }
-         | ADD_ASSIGN LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, ADD_ASSIGN_EXP); }
-         | MINUS_ASSIGN LPAR expressao COMMA expressao RPAR     { exp = expCreate(NULL, MINUS_ASSIGN_EXP); }
+         ASSIGN LPAR expressao COMMA expressao RPAR             { expression = expCreate(NULL, ASSIGN_EXP);         Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | PLUS LPAR expressao COMMA expressao RPAR             { expression = expCreate(NULL, PLUS_EXP);           Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | MINUS LPAR expressao COMMA expressao RPAR            { expression = expCreate(NULL, MINUS_EXP);          Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | MULTIPLY LPAR expressao COMMA expressao RPAR         { expression = expCreate(NULL, MULTIPLY_EXP);       Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | DIV LPAR expressao COMMA expressao RPAR              { expression = expCreate(NULL, DIV_EXP);            Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | REMAINDER LPAR expressao COMMA expressao RPAR        { expression = expCreate(NULL, REMAINDER_EXP);      Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | BITWISE_AND LPAR expressao COMMA expressao RPAR      { expression = expCreate(NULL, BITWISE_AND_EXP);    Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | BITWISE_OR LPAR expressao COMMA expressao RPAR       { expression = expCreate(NULL, BITWISE_OR_EXP);     Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | BITWISE_XOR LPAR expressao COMMA expressao RPAR      { expression = expCreate(NULL, BITWISE_XOR_EXP);    Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | LOGICAL_AND LPAR expressao COMMA expressao RPAR      { expression = expCreate(NULL, LOGICAL_AND_EXP);    Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | LOGICAL_OR LPAR expressao COMMA expressao RPAR       { expression = expCreate(NULL, LOGICAL_OR_EXP);     Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | EQUAL LPAR expressao COMMA expressao RPAR            { expression = expCreate(NULL, EQUAL_EXP);          Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | NOT_EQUAL LPAR expressao COMMA expressao RPAR        { expression = expCreate(NULL, NOT_EQUAL_EXP);      Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | LESS_THAN LPAR expressao COMMA expressao RPAR        { expression = expCreate(NULL, LESS_THAN_EXP);      Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | GREATER_THAN LPAR expressao COMMA expressao RPAR     { expression = expCreate(NULL, GREATER_THAN_EXP);   Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | LESS_EQUAL LPAR expressao COMMA expressao RPAR       { expression = expCreate(NULL, LESS_EQUAL_EXP);     Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | GREATER_EQUAL LPAR expressao COMMA expressao RPAR    { expression = expCreate(NULL, GREATER_EQUAL_EXP);  Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | R_SHIFT LPAR expressao COMMA expressao RPAR          { expression = expCreate(NULL, R_SHIFT_EXP);        Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | L_SHIFT LPAR expressao COMMA expressao RPAR          { expression = expCreate(NULL, L_SHIFT_EXP);        Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | ADD_ASSIGN LPAR expressao COMMA expressao RPAR       { expression = expCreate(NULL, ADD_ASSIGN_EXP);     Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | MINUS_ASSIGN LPAR expressao COMMA expressao RPAR     { expression = expCreate(NULL, MINUS_ASSIGN_EXP);   Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
     ;
 
 
@@ -234,7 +234,7 @@ AST ast;
 
     function_return:
         RETURN LPAR expressao RPAR
-        | RETURN LPAR RPAR
+        | RETURN LPAR RPAR { printExpression(); }
 
 
     ;
