@@ -75,6 +75,8 @@ Exp expInsertRigdht(Exp parent, Exp child);
 
 char *expGetId(Exp ex);
 
+int expGetType(Exp ex);
+
 
 void printExpression(Exp ex);
 

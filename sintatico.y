@@ -23,6 +23,7 @@ AST ast;
 %union{
   int int_t;
   char *id;
+  void *node;
 }
 
 %token CONSTANT
@@ -88,8 +89,9 @@ AST ast;
 
 %start inicio
 
-%type <id> expressao
+%type <node> expressao
 %type <id> ID
+
 
 %%
     inicio: AST_TOKEN ARROW body { printf("RODOU\n"); exit(0); }
@@ -144,10 +146,7 @@ AST ast;
     ;
 
     function_body:
-        return_type parameters local_def commands{
-            printf("Expressions:\n");
-            printExpression(exp);
-        }
+        return_type parameters local_def commands{ }
     ;
     return_type:
         RETURN_TYPE COLON tipo
@@ -170,28 +169,16 @@ AST ast;
     ;
      
     expressao:
-        bin_exp_left {  }
-        | unary_exp {  }
-        | ID { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
-    ;
-
-    expressao_esq:
         bin_exp {  }
         | unary_exp {  }
-        | ID { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
+        | ID { char *temp = $1; char *identifier = (char*) malloc(sizeof(char) * strlen(temp)); strcpy(identifier, temp); exp = expCreate(NULL, VAR_EXP); expSetId(exp, identifier); $$ = exp; }
     ;
 
-
-    expressao_dir:
-        bin_exp_left {  }
-        | unary_exp {  }
-        | ID { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
-    ;
 
 
     bin_exp:
-         ASSIGN LPAR expressao_esq COMMA expressao_dir RPAR     { exp = expCreate(NULL, ASSIGN_EXP); expInsertLeft(exp, expAux); }
-         | PLUS LPAR expressao_esq COMMA expressao_dir RPAR     { exp = expCreate(NULL, PLUS_EXP); expInsertRight(exp, expAux); }
+         ASSIGN LPAR expressao COMMA expressao RPAR             { exp = expCreate(NULL, ASSIGN_EXP); }
+         | PLUS LPAR expressao COMMA expressao RPAR             { exp = expCreate(NULL, PLUS_EXP); Exp temp1 = $3; Exp temp2 = $5; if(expGetType(temp1) == VAR_EXP) printf("LEFT: %s", expGetId(temp1)); if(expGetType(temp2) == VAR_EXP) printf("==== RIGHT: %s\n", expGetId(temp2)); else printf("\n"); }
          | MINUS LPAR expressao COMMA expressao RPAR            { exp = expCreate(NULL, MINUS_EXP); }
          | MULTIPLY LPAR expressao COMMA expressao RPAR         { exp = expCreate(NULL, MULTIPLY_EXP); }
          | DIV LPAR expressao COMMA expressao RPAR              { exp = expCreate(NULL, DIV_EXP); }
@@ -212,10 +199,7 @@ AST ast;
          | ADD_ASSIGN LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, ADD_ASSIGN_EXP); }
          | MINUS_ASSIGN LPAR expressao COMMA expressao RPAR     { exp = expCreate(NULL, MINUS_ASSIGN_EXP); }
     ;
-    
-    bin_exp_right:
-        expressao RPAR { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
-    ;
+
 
 
     unary_exp:

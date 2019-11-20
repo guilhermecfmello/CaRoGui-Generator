@@ -103,10 +103,10 @@ Exp expCreate(AST as,  int type){
 Exp expSetId(Exp ex, char *identifier){
     exp *e = (exp*) ex;
 
-    if(e->type == VAR_EXP)
-        e->id = identifier;
-    // else
-        // e->id = NULL;
+    if(e->type == VAR_EXP){
+        e->id = (char*) malloc(sizeof(char) * strlen(identifier));
+        strcpy(e->id, identifier);
+    }
     return e;
 }
 
@@ -126,6 +126,14 @@ char *expGetId(Exp ex){
 
     return e->id;
 }
+
+
+int expGetType(Exp ex){
+    exp *e = (exp*) ex;
+    
+    return e->type;
+}
+
 
 void printExpression(Exp ex){
     exp *e = (exp*) ex;
