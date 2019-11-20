@@ -11,14 +11,18 @@
 #include "Ast.h"
 
 extern char* yytext;
-int yyerror(char *s);
 extern int yylex();
+int yyerror(char *s);
+Exp exp, expAux;
 
+AST ast;
+// Lista expTest;
 
 %}
 
 %union{
   int int_t;
+  char *id;
 }
 
 %token CONSTANT
@@ -84,10 +88,11 @@ extern int yylex();
 
 %start inicio
 
-// %type <int_t> programa
+%type <id> expressao
+%type <id> ID
 
 %%
-    inicio: AST_TOKEN ARROW body { printf("RODOU"); exit(0); }
+    inicio: AST_TOKEN ARROW body { printf("RODOU\n"); exit(0); }
     ;
 
     body2: {}
@@ -124,7 +129,9 @@ extern int yylex();
 
     ponteiro:
         ESTRELA ponteiro
-        |NUM
+        |
+    ;
+
     array:
         LBRACKET NUM RBRACKET
         |
@@ -138,6 +145,8 @@ extern int yylex();
 
     function_body:
         return_type parameters local_def commands{
+            printf("Expressions:\n");
+            printExpression(exp);
         }
     ;
     return_type:
@@ -161,34 +170,54 @@ extern int yylex();
     ;
      
     expressao:
-        bin_exp { printf("Expressao Binaria\n"); }
-        | unary_exp { printf("Expressao Unaria\n"); }
-        | ID { printf("Identifier\n"); }
+        bin_exp_left {  }
+        | unary_exp {  }
+        | ID { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
     ;
+
+    expressao_esq:
+        bin_exp {  }
+        | unary_exp {  }
+        | ID { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
+    ;
+
+
+    expressao_dir:
+        bin_exp_left {  }
+        | unary_exp {  }
+        | ID { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
+    ;
+
+
     bin_exp:
-         ASSIGN LPAR expressao COMMA expressao RPAR 
-         | PLUS LPAR expressao COMMA expressao RPAR
-         | MINUS LPAR expressao COMMA expressao RPAR
-         | MULTIPLY LPAR expressao COMMA expressao RPAR
-         | DIV LPAR expressao COMMA expressao RPAR
-         | REMAINDER LPAR expressao COMMA expressao RPAR
-         | BITWISE_AND LPAR expressao COMMA expressao RPAR
-         | BITWISE_OR LPAR expressao COMMA expressao RPAR
-         | BITWISE_XOR LPAR expressao COMMA expressao RPAR
-         | LOGICAL_AND LPAR expressao COMMA expressao RPAR
-         | LOGICAL_OR LPAR expressao COMMA expressao RPAR
-         | EQUAL LPAR expressao COMMA expressao RPAR
-         | NOT_EQUAL LPAR expressao COMMA expressao RPAR
-         | LESS_THAN LPAR expressao COMMA expressao RPAR
-         | GREATER_THAN LPAR expressao COMMA expressao RPAR
-         | LESS_EQUAL LPAR expressao COMMA expressao RPAR
-         | GREATER_EQUAL LPAR expressao COMMA expressao RPAR
-         | R_SHIFT LPAR expressao COMMA expressao RPAR
-         | L_SHIFT LPAR expressao COMMA expressao RPAR
-         | ADD_ASSIGN LPAR expressao COMMA expressao RPAR
-         | MINUS_ASSIGN LPAR expressao COMMA expressao RPAR
+         ASSIGN LPAR expressao_esq COMMA expressao_dir RPAR     { exp = expCreate(NULL, ASSIGN_EXP); expInsertLeft(exp, expAux); }
+         | PLUS LPAR expressao_esq COMMA expressao_dir RPAR     { exp = expCreate(NULL, PLUS_EXP); expInsertRight(exp, expAux); }
+         | MINUS LPAR expressao COMMA expressao RPAR            { exp = expCreate(NULL, MINUS_EXP); }
+         | MULTIPLY LPAR expressao COMMA expressao RPAR         { exp = expCreate(NULL, MULTIPLY_EXP); }
+         | DIV LPAR expressao COMMA expressao RPAR              { exp = expCreate(NULL, DIV_EXP); }
+         | REMAINDER LPAR expressao COMMA expressao RPAR        { exp = expCreate(NULL, REMAINDER_EXP); }
+         | BITWISE_AND LPAR expressao COMMA expressao RPAR      { exp = expCreate(NULL, BITWISE_AND_EXP); }
+         | BITWISE_OR LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, BITWISE_OR_EXP); }
+         | BITWISE_XOR LPAR expressao COMMA expressao RPAR      { exp = expCreate(NULL, BITWISE_XOR_EXP); }
+         | LOGICAL_AND LPAR expressao COMMA expressao RPAR      { exp = expCreate(NULL, LOGICAL_AND_EXP); }
+         | LOGICAL_OR LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, LOGICAL_OR_EXP); }
+         | EQUAL LPAR expressao COMMA expressao RPAR            { exp = expCreate(NULL, EQUAL_EXP); }
+         | NOT_EQUAL LPAR expressao COMMA expressao RPAR        { exp = expCreate(NULL, NOT_EQUAL_EXP); }
+         | LESS_THAN LPAR expressao COMMA expressao RPAR        { exp = expCreate(NULL, LESS_THAN_EXP); }
+         | GREATER_THAN LPAR expressao COMMA expressao RPAR     { exp = expCreate(NULL, GREATER_THAN_EXP); }
+         | LESS_EQUAL LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, LESS_EQUAL_EXP); }
+         | GREATER_EQUAL LPAR expressao COMMA expressao RPAR    { exp = expCreate(NULL, GREATER_EQUAL_EXP); }
+         | R_SHIFT LPAR expressao COMMA expressao RPAR          { exp = expCreate(NULL, R_SHIFT_EXP); }
+         | L_SHIFT LPAR expressao COMMA expressao RPAR          { exp = expCreate(NULL, L_SHIFT_EXP); }
+         | ADD_ASSIGN LPAR expressao COMMA expressao RPAR       { exp = expCreate(NULL, ADD_ASSIGN_EXP); }
+         | MINUS_ASSIGN LPAR expressao COMMA expressao RPAR     { exp = expCreate(NULL, MINUS_ASSIGN_EXP); }
     ;
-        
+    
+    bin_exp_right:
+        expressao RPAR { expAux = expCreate(NULL, VAR_EXP); char *s = $1; expSetId(exp, s); }
+    ;
+
+
     unary_exp:
         PLUS LPAR expressao RPAR {printf("TENTANDO\n");}
         | MINUS LPAR expressao RPAR {printf("TENTANDO\n");}

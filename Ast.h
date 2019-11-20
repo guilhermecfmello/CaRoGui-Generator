@@ -36,7 +36,7 @@ typedef void* Exp;
 #define GREATER_EQUAL_EXP      24
 #define R_SHIFT_EXP            25
 #define L_SHIFT_EXP            26
-#define ASSIGN_EXP_EXP         27
+#define ASSIGN_EXP             27
 #define ADD_ASSIGN_EXP         28
 #define MINUS_ASSIGN_EXP       29
 #define VAR_EXP                30
@@ -65,15 +65,15 @@ AST createAST();
 /* Print the AST tree on the default output */
 void printAST(AST a);
 
-/* createExpression(AST as,  int type); */
-Exp createExpression(AST as,  int type);
+Exp expCreate(AST as,  int type);
 
 Exp expSetId(Exp ex, char *identifier);
 
 Exp expInsertLeft(Exp parent, Exp child);
 
+Exp expInsertRigdht(Exp parent, Exp child);
 
-Exp expInsertRight(Exp parent, Exp child);
+char *expGetId(Exp ex);
 
 
 void printExpression(Exp ex);

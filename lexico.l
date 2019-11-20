@@ -68,7 +68,7 @@
 "!"                         {return NOT;}
 "\""                        {return QUOTE;}
 ";"                         {return SEMICOLON;}
-[a-zA-Z_]+[a-zA-Z0-9_]*     {return ID;}
+[a-zA-Z_]+[a-zA-Z0-9_]*     { yylval.id = yytext; return ID;}
 
 <<EOF>> {return(END_FILE);}
 .       {printf("Erro lexico"); exit(0);}

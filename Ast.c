@@ -97,6 +97,7 @@ Exp expCreate(AST as,  int type){
     e->left = NULL;
     e->right = NULL;
     e->id = NULL;
+
 }
 
 Exp expSetId(Exp ex, char *identifier){
@@ -120,21 +121,27 @@ Exp expInsertRight(Exp parent, Exp child){
     e->right = child;
 }
 
-// void printExpression(Exp ex){
-//     exp *e = (exp*) ex;
+char *expGetId(Exp ex){
+    exp *e = (exp*) ex;
 
-//     if(ex->left != NULL){
-//         nExp++;
-//         printExpression(ex->left);
-//     }
-//     printf("LEFT level %d: %s", nExp, ex->id);
-//     nExp = 0;
-//     if(ex->right != NULL){
-//         nExp++;
-//         printExpression(ex->right);
-//     }
-//     printf("LEFT level %d: %s", nExp, ex->id);
-// }
+    return e->id;
+}
+
+void printExpression(Exp ex){
+    exp *e = (exp*) ex;
+
+    if(e->left != NULL){
+        nExp++;
+        printExpression(e->left);
+    }
+    printf("LEFT level %d: %s\n", nExp, e->id);
+    nExp = 0;
+    if(e->right != NULL){
+        nExp++;
+        printExpression(e->right);
+    }
+    printf("LEFT level %d: %s\n", nExp, e->id);
+}
 
 
 
