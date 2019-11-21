@@ -29,6 +29,7 @@ int length(Lista list){
   return aux->size;
 }
 
+
 Posic insert(Lista list, Lista item){
   head *l = (head*) list;
   posic *newNode = (posic*) malloc(sizeof(posic));

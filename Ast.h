@@ -41,6 +41,9 @@ typedef void* Exp;
 #define MINUS_ASSIGN_EXP       29
 #define VAR_EXP                30
 
+/*
+*   Contants for Breadth-First search
+*/
 
 
 
@@ -73,11 +76,28 @@ Exp expInsertLeft(Exp parent, Exp child);
 
 Exp expInsertRight(Exp parent, Exp child);
 
+Exp expGetLeft(Exp ex);
+
+Exp expGetRight(Exp ex);
+
 char *expGetId(Exp ex);
 
 int expGetType(Exp ex);
 
 
 void printExpression(Exp ex);
+
+
+/*
+* Refresh the expressions levels since 
+* given the start node
+*/
+void refreshExpTree(Exp ex);
+
+/*
+* Returns a new allocated string that represents the 
+* type of the expression given
+*/
+char *getTypeString(Exp ex);
 
 #endif

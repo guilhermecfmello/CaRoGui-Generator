@@ -156,6 +156,7 @@ AST ast;
         PARAMETER COLON ID TYPE COLON tipo parameters
         |
     ;
+
     commands:
          comando_do_while commands
         | comando_if commands
@@ -164,7 +165,7 @@ AST ast;
         | comando_printa commands
         | comando_scanf commands
         | comando_exit commands
-        | expressao SEMICOLON commands
+        | expressao SEMICOLON commands { Exp temp = $1; printExpression(temp); }
         |
     ;
      
@@ -173,7 +174,6 @@ AST ast;
         | unary_exp {  }
         | ID { char *temp = $1; char *identifier = (char*) malloc(sizeof(char) * strlen(temp)); strcpy(identifier, temp); expression = expCreate(NULL, VAR_EXP); expSetId(expression, identifier); $$ = expression; }
     ;
-
 
 
     bin_exp:
@@ -234,7 +234,7 @@ AST ast;
 
     function_return:
         RETURN LPAR expressao RPAR
-        | RETURN LPAR RPAR { printExpression(); }
+        | RETURN LPAR RPAR { /*printExpression(); */}
 
 
     ;

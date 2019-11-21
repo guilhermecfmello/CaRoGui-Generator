@@ -43,7 +43,12 @@
 * MINUS_ASSIGN       29
 * VAR                30
 */
-int nExp = 0;
+
+#define WHITE 100
+#define GREY 101
+#define BLACK 102
+
+
 
 typedef struct __node {
     int type;
@@ -61,6 +66,9 @@ typedef struct __node {
     char *string; // String value used on printf and scanf block
 
 
+
+    
+
 } node;
 
 typedef struct _expression {
@@ -69,6 +77,8 @@ typedef struct _expression {
     Exp right;
 
     char *id; // Variable identifier
+    int color; // Used only to print the node on the default output
+    int nivel;
 } exp;
 
 typedef struct __ast {
@@ -98,6 +108,9 @@ Exp expCreate(AST as,  int type){
     e->right = NULL;
     e->id = NULL;
 
+
+    e->color = WHITE;
+    e->nivel = 0;
 }
 
 Exp expSetId(Exp ex, char *identifier){
@@ -112,12 +125,20 @@ Exp expSetId(Exp ex, char *identifier){
 
 Exp expInsertLeft(Exp parent, Exp child){
     exp *e = (exp*) parent;
+    exp *e_child = (exp*) child;
+
+    // e->nivel = e_child->nivel + 1;
+    refreshExpTree(child);
     e->left = child;
 }
 
 
 Exp expInsertRight(Exp parent, Exp child){
     exp *e = (exp*) parent;
+    exp *e_child = (exp*) child;
+
+    // e->nivel = e_child->nivel + 1;
+    refreshExpTree(child);
     e->right = child;
 }
 
@@ -135,21 +156,181 @@ int expGetType(Exp ex){
 }
 
 
-void printExpression(Exp ex){
-    exp *e = (exp*) ex;
 
-    if(e->left != NULL){
-        nExp++;
-        printExpression(e->left);
+void refreshExpTree(Exp ex){
+    exp *e = (exp*) ex;
+    if(e != NULL){
+        refreshExpTree(e->left);
+        refreshExpTree(e->right);
+        e->nivel = e->nivel + 1;
     }
-    printf("LEFT level %d: %s\n", nExp, e->id);
-    nExp = 0;
-    if(e->right != NULL){
-        nExp++;
-        printExpression(e->right);
-    }
-    printf("LEFT level %d: %s\n", nExp, e->id);
+
 }
+
+void printExpression(Exp ex){
+    int i, last_nivel;
+    exp *e = (exp*) ex;
+    exp *left, *right;
+    Exp aux;
+    Lista list = createList();
+
+
+    printf("\n========= Starting expressions printing =========\n");
+    insert(list, e);
+
+    last_nivel = e->nivel;
+    i = 0;
+    while(length(list) > 0){
+        aux = getFirst(list);
+        e = (exp*) get(list, aux);
+
+        left = e->left;
+        right = e->right;
+
+        if(left != NULL){
+            if(left->color == WHITE){
+                left->color = GREY;
+                insert(list, left);
+            }
+        }
+
+        if(right != NULL){
+            if(right->color == WHITE){
+                right->color = GREY;
+                insert(list, right);
+            }
+        }
+
+        
+        if(last_nivel != e->nivel){
+            printf("\n");
+            last_nivel = e->nivel;
+        }
+        
+        if(e->type == VAR_EXP){
+            printf("%s ", e->id);
+        } else{
+            printf("%s ", getTypeString(e));
+        }
+
+        e->color = BLACK;
+        remover(list, aux);
+
+
+    }
+    
+}
+
+Exp expGetLeft(Exp ex){
+    exp *e = (exp*) ex;
+    return e->left;
+}
+
+Exp expGetRight(Exp ex){
+    exp *e = (exp*) ex;
+    return e->right;
+}
+
+char *getTypeString(Exp ex){
+    char *s;
+    exp *e = (exp*) ex;
+    switch(e->type){
+        case(PLUS_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"PLUS_EXP");
+            break;
+        case(MINUS_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"MINUS_EXP");
+            break;
+        case(MULTIPLY_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"MULTIPLY_EXP");
+            break;
+        case(DIV_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"DIV_EXP");
+            break;
+        case(REMAINDER_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"REMAINDER_EXP");
+            break;
+        case(BITWISE_AND_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"BITWISE_AND_EXP");
+            break;
+        case(BITWISE_OR_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"BITWISE_OR_EXP");
+            break;
+        case(BITWISE_XOR_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"BITWISE_XOR_EXP");
+            break;
+        case(LOGICAL_AND_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"LOGICAL_AND_EXP");
+            break;
+        case(LOGICAL_OR_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"LOGICAL_OR_EXP");
+            break;
+        case(EQUAL_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"EQUAL_EXP");
+            break;
+        case(NOT_EQUAL_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"NOT_EQUAL_EXP");
+            break;
+        case(LESS_THAN_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"LESS_THAN_EXP");
+            break;
+        case(GREATER_THAN_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"GREATER_THAN_EXP");
+            break;
+        case(LESS_EQUAL_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"LESS_EQUAL_EXP");
+            break;
+        case(GREATER_EQUAL_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"GREATER_EQUAL_EXP");
+            break;
+        case(R_SHIFT_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"R_SHIFT_EXP");
+            break;
+        case(L_SHIFT_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"L_SHIFT_EXP");
+            break;
+        case(ASSIGN_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"ASSIGN_EXP");
+            break;
+        case(ADD_ASSIGN_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"ADD_ASSIGN_EXP");
+            break;
+        case(MINUS_ASSIGN_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"MINUS_ASSIGN_EXP");
+            break;
+        case(VAR_EXP):
+            s = malloc(sizeof(char)*20);
+            strcpy(s,"VAR_EXP");
+            break;
+        default:
+            s = malloc(sizeof(char)*20);
+            strcpy(s, "UNDEFINED");
+            break;
+    }
+    return s;
+}
+
 
 
 
