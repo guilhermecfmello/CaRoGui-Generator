@@ -65,10 +65,6 @@ typedef struct __node {
 
     char *string; // String value used on printf and scanf block
 
-
-
-    
-
 } node;
 
 typedef struct _expression {
@@ -127,7 +123,6 @@ Exp expInsertLeft(Exp parent, Exp child){
     exp *e = (exp*) parent;
     exp *e_child = (exp*) child;
 
-    // e->nivel = e_child->nivel + 1;
     refreshExpTree(child);
     e->left = child;
 }
@@ -137,7 +132,6 @@ Exp expInsertRight(Exp parent, Exp child){
     exp *e = (exp*) parent;
     exp *e_child = (exp*) child;
 
-    // e->nivel = e_child->nivel + 1;
     refreshExpTree(child);
     e->right = child;
 }
@@ -148,14 +142,11 @@ char *expGetId(Exp ex){
     return e->id;
 }
 
-
 int expGetType(Exp ex){
     exp *e = (exp*) ex;
     
     return e->type;
 }
-
-
 
 void refreshExpTree(Exp ex){
     exp *e = (exp*) ex;
@@ -164,7 +155,6 @@ void refreshExpTree(Exp ex){
         refreshExpTree(e->right);
         e->nivel = e->nivel + 1;
     }
-
 }
 
 void printExpression(Exp ex){
@@ -215,8 +205,6 @@ void printExpression(Exp ex){
 
         e->color = BLACK;
         remover(list, aux);
-
-
     }
     
 }
