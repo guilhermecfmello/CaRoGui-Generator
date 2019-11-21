@@ -1,54 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "Ast.h"
 
-
-
 /*
-* struct types:
-*   - 1: do-while
-*   - 2: if
-*   - 3: while
-*   - 4: for
-*   - 5: printf
-*   - 6: scanf
-*   - 7: exit
-*   - 8: return
+*   Constants for Breadth-First search
 */
-
-
-/*
-* PLUS                9
-* MINUS              10
-* MULTIPLY           11
-* DIV                12
-* REMAINDER          13
-* BITWISE_AND        14
-* BITWISE_OR         15
-* BITWISE_XOR        16
-* LOGICAL_AND        17
-* LOGICAL_OR         18
-* EQUAL              19
-* NOT_EQUAL          20
-* LESS_THAN          21
-* GREATER_THAN       22
-* LESS_EQUAL         23
-* GREATER_EQUAL      24
-* R_SHIFT            25
-* L_SHIFT            26
-* ASSIGN             27
-* ADD_ASSIGN         28
-* MINUS_ASSIGN       29
-* VAR                30
-*/
-
 #define WHITE 100
 #define GREY 101
 #define BLACK 102
-
-
 
 typedef struct __node {
     int type;
@@ -56,15 +16,13 @@ typedef struct __node {
     Lista commands_then; // Command then used in while, if, for and do-while blocks
     Lista commands_else; // Command else user in if block
 
-    Exp exp_start; // The start expression used on for block
-    Exp exp_stop; // Stop Condition
-    Exp exp_cond; // Conditional expression
-    Exp exp_adjust; // Values adjust of for block
-    Exp exp_end; // Expresion of addres used on pointers
+    Exp exp_start;       // The start expression used on for block
+    Exp exp_stop;        // Stop Condition
+    Exp exp_cond;        // Conditional expression
+    Exp exp_adjust;      // Values adjust of for block
+    Exp exp_end;         // Expresion of addres used on pointers
 
-
-    char *string; // String value used on printf and scanf block
-
+    char *string;        // String value used on printf and scanf block
 } node;
 
 typedef struct _expression {
@@ -72,15 +30,14 @@ typedef struct _expression {
     Exp left;
     Exp right;
 
-    char *id; // Variable identifier
-    int color; // Used only to print the node on the default output
-    int nivel;
+    char *id;             // Variable identifier
+    int color;            // Used to print the tree on default output
+    int nivel;            // Used to print the tree on default output
 } exp;
 
 typedef struct __ast {
     Lista nodes;
 } ast;
-
 
 AST createAST(){
     ast *a = (ast*) malloc(sizeof(ast));
@@ -88,13 +45,11 @@ AST createAST(){
     return a;
 }
 
-// Node addNode(AST as, int type){
-//     node *n = (node*) malloc(sizeof(node));
-//     ast *a = (ast*) as;
-//     n->type = type;
-//     insert(a, n);
-// }
+// ======================== Commands functions ======================== // 
 
+
+
+// ======================== Expressions functions ======================== //
 Exp expCreate(AST as,  int type){
     ast *a = (ast*) as;
 
@@ -104,9 +59,19 @@ Exp expCreate(AST as,  int type){
     e->right = NULL;
     e->id = NULL;
 
+    e->color = WHITE;   // Used to print the tree on default output
+    e->nivel = 0;       // Used to print the tree on default output
+}
 
-    e->color = WHITE;
-    e->nivel = 0;
+
+Exp expGetLeft(Exp ex){
+    exp *e = (exp*) ex;
+    return e->left;
+}
+
+Exp expGetRight(Exp ex){
+    exp *e = (exp*) ex;
+    return e->right;
 }
 
 Exp expSetId(Exp ex, char *identifier){
@@ -123,7 +88,7 @@ Exp expInsertLeft(Exp parent, Exp child){
     exp *e = (exp*) parent;
     exp *e_child = (exp*) child;
 
-    refreshExpTree(child);
+    refreshExpTree(child); // Used to print the tree on default output
     e->left = child;
 }
 
@@ -132,7 +97,7 @@ Exp expInsertRight(Exp parent, Exp child){
     exp *e = (exp*) parent;
     exp *e_child = (exp*) child;
 
-    refreshExpTree(child);
+    refreshExpTree(child); // Used to print the tree on default output
     e->right = child;
 }
 
@@ -209,15 +174,6 @@ void printExpression(Exp ex){
     
 }
 
-Exp expGetLeft(Exp ex){
-    exp *e = (exp*) ex;
-    return e->left;
-}
-
-Exp expGetRight(Exp ex){
-    exp *e = (exp*) ex;
-    return e->right;
-}
 
 char *getTypeString(Exp ex){
     char *s;
