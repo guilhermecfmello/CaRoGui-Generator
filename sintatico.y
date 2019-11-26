@@ -158,14 +158,14 @@ AST ast;
     ;
 
     commands:
-         comando_do_while commands
-        | comando_if commands
-        | comando_while commands
-        | comando_for commands
-        | comando_printa commands
-        | comando_scanf commands
-        | comando_exit commands
-        | expressao SEMICOLON commands { Exp temp = $1; printExpression(temp); }
+         comando_do_while commands      { printf("comando_do_while commands\n"); }
+        | comando_if commands           { printf("comando_if commands\n"); }
+        | comando_while commands        { printf("comando_while commands\n"); }
+        | comando_for commands          { printf("comando_for commands\n"); }
+        | comando_printa commands       { printf("comando_printa commands\n"); }
+        | comando_scanf commands        { printf("comando_scanf commands\n"); }
+        | comando_exit commands         { printf("comando_exit commands\n"); }
+        | expressao SEMICOLON commands  { Exp temp = $1; printExpression(temp); }
         |
     ;
      

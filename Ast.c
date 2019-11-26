@@ -46,6 +46,53 @@ AST createAST(){
 }
 
 // ======================== Commands functions ======================== // 
+Node doWhileCreate(AST as, Node commands, Exp stopCondition){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = DOWHILE_NODE;
+}
+
+Node ifCreate(AST as, Exp cond, Node commandsThen, Node commandsElse){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = IF_NODE;
+}
+
+Node whileCreate(AST as, Exp cond, Node commands){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = WHILE_NODE;
+}
+
+Node forCreate(AST as, Exp start, Exp stopCond, Exp adjust, Node commandList){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = FOR_NODE;
+}
+
+Node printfCreate(AST as, char *s, Exp expressions){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = PRINTF_NODE;
+}
+
+Node scanfCreate(AST as, char *s, Node varAddress){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = SCANF_NODE;
+}
+
+Node exitCreate(AST as, Exp expression){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = EXIT_NODE;
+}
+
+Node returnCreate(AST as, Exp expression){
+    ast *a = (ast*) as;
+    node *n = (node*) malloc(sizeof(node));
+    n->type = RETURN_NODE;
+}
 
 
 
@@ -175,6 +222,7 @@ void printExpression(Exp ex){
 
 
     }
+    printf("\n\n");
     
 }
 

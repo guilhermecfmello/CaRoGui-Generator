@@ -44,6 +44,17 @@ typedef void* Exp;
 
 AST createAST();
 
+// ======================== Commands functions ======================== //
+Node doWhileCreate(AST as, Node commands, Exp stopCondition);
+Node ifCreate(AST as, Exp cond, Node commandsThen, Node commandsElse);
+Node whileCreate(AST as, Exp cond, Node commands);
+Node forCreate(AST as, Exp start, Exp stopCond, Exp adjust, Node commandList);
+Node printfCreate(AST as, char *s, Exp expressions);
+Node scanfCreate(AST as, char *s, Node varAddress);
+Node exitCreate(AST as, Exp expression);
+Node returnCreate(AST as, Exp expression);
+
+
 // ======================== Expressions functions ======================== //
 
 /*
