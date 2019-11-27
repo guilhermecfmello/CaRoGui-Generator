@@ -97,9 +97,6 @@ AST ast;
     inicio: AST_TOKEN ARROW body { printf("RODOU\n"); exit(0); }
     ;
 
-    body2: {}
-    ;
-
     body:
         constant_def body
         | global_def body
@@ -165,20 +162,20 @@ AST ast;
         | comando_printa commands       { printf("comando_printa commands\n"); }
         | comando_scanf commands        { printf("comando_scanf commands\n"); }
         | comando_exit commands         { printf("comando_exit commands\n"); }
-        | expressao SEMICOLON commands  { Exp temp = $1; printExpression(temp); }
+        | expressao SEMICOLON commands  { printf("comando_expressao SEMICOLON commands\n"); Exp temp = $1; printExpression(temp); }
         |
     ;
      
     expressao:
-        bin_exp {  }
+        bin_exp { /*printf("EXPRESSAO BINARIA\n");*/ }
         | unary_exp {  }
-        | ID { char *temp = $1; char *identifier = (char*) malloc(sizeof(char) * strlen(temp)); strcpy(identifier, temp); expression = expCreate(NULL, VAR_EXP); expSetId(expression, identifier); $$ = expression; }
+        | ID { printf("ID\n"); char *temp = $1; char *identifier = (char*) malloc(sizeof(char) * strlen(temp)); strcpy(identifier, temp); expression = expCreate(NULL, VAR_EXP); expSetId(expression, identifier); $$ = expression; }
     ;
 
 
     bin_exp:
-         ASSIGN LPAR expressao COMMA expressao RPAR             { expression = expCreate(NULL, ASSIGN_EXP);         Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
-         | PLUS LPAR expressao COMMA expressao RPAR             { expression = expCreate(NULL, PLUS_EXP);           Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         ASSIGN LPAR expressao COMMA expressao RPAR             { printf("ASSIGN\n"); expression = expCreate(NULL, ASSIGN_EXP);         Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
+         | PLUS LPAR expressao COMMA expressao RPAR             { printf("PLUS\n"); expression = expCreate(NULL, PLUS_EXP);           Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
          | MINUS LPAR expressao COMMA expressao RPAR            { expression = expCreate(NULL, MINUS_EXP);          Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
          | MULTIPLY LPAR expressao COMMA expressao RPAR         { expression = expCreate(NULL, MULTIPLY_EXP);       Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
          | DIV LPAR expressao COMMA expressao RPAR              { expression = expCreate(NULL, DIV_EXP);            Exp temp1 = $3; Exp temp2 = $5; expInsertLeft(expression, temp1); expInsertRight(expression, temp2); $$ = expression; }
@@ -216,20 +213,30 @@ AST ast;
     ;
 
     comando_do_while:
-        DO_WHILE LPAR commands COMMA expressao RPAR
+        DO_WHILE LPAR commands COMMA expressao RPAR { printf("DO_WHILE executou\n"); }
     ;
     comando_if:
-        IF LPAR 
+        IF LPAR expressao COMMA commands COMMA commands RPAR { printf("COMANDO_IF executou\n"); }
     ;
     comando_while:
+        WHILE LPAR expressao COMMA commands RPAR
     ;
     comando_for:
+        FOR LPAR expressao COMMA expressao COMMA expressao COMMA commands RPAR
     ;
+    
     comando_printa:
+        PRINTF LPAR string COMMA expressao RPAR
     ;
     comando_scanf:
+        SCANF LPAR string COMMA expressao RPAR
     ;
     comando_exit:
+        EXIT LPAR expressao RPAR
+    ;
+    
+    string:
+        QUOTE ID QUOTE
     ;
 
     function_return:
